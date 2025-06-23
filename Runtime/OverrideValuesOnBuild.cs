@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
@@ -8,6 +5,7 @@ using UnityEngine;
 
 namespace Narazaka.VRChat.OverrideValuesOnBuild
 {
+    [AddComponentMenu("OverrideValuesOnBuild")]
     public class OverrideValuesOnBuild : MonoBehaviour
     {
         [SerializeField] public Component target;
