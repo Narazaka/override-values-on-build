@@ -12,14 +12,14 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild.Editor.SerializedHandlers
         /// </summary>
         /// <param name="sourceProperty">The SerializedProperty to analyze.</param>
         /// <returns>The System.Type of the property at the end of the property path.</returns>
-        public static System.Type ObjectType(SerializedProperty sourceProperty)
+        public static System.Type ObjectType(SerializedProperty sourceProperty, System.Type fallbackType)
         {
             // Start with the target object's type
             var targetObject = sourceProperty.serializedObject.targetObject;
             if (targetObject == null)
             {
                 Debug.LogWarning($"SerializedPropertyTypeResolver: Target object is null for {sourceProperty.propertyPath}");
-                return typeof(UnityEngine.Object);
+                return fallbackType;
             }
 
             System.Type currentType = targetObject.GetType();
@@ -88,7 +88,7 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild.Editor.SerializedHandlers
                     else
                     {
                         Debug.LogWarning($"SerializedPropertyTypeResolver: Could not find field or property {fieldName} in type {currentType.Name} for path {propertyPath}");
-                        return typeof(UnityEngine.Object);
+                        return fallbackType;
                     }
                 }
 
@@ -106,7 +106,7 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild.Editor.SerializedHandlers
                     else
                     {
                         Debug.LogWarning($"SerializedPropertyTypeResolver: Expected array or list for {fieldName} in path {propertyPath}, but got {currentType.Name}");
-                        return typeof(UnityEngine.Object);
+                        return fallbackType;
                     }
                 }
             }

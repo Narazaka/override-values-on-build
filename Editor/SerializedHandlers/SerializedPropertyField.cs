@@ -28,13 +28,15 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild.Editor.SerializedHandlers
                     newValue = EditorGUI.ColorField(rect, sourceProperty.displayName, (UnityEngine.Color)value);
                     break;
                 case SerializedPropertyType.ObjectReference:
-                    newValue = EditorGUI.ObjectField(rect, sourceProperty.displayName, (UnityEngine.Object)value, SerializedPropertyTypeResolver.ObjectType(sourceProperty), true);
+                    newValue = EditorGUI.ObjectField(rect, sourceProperty.displayName, (UnityEngine.Object)value, SerializedPropertyTypeResolver.ObjectType(sourceProperty, typeof(UnityEngine.Object)), true);
                     break;
                 case SerializedPropertyType.LayerMask:
                     newValue = EditorGUI.LayerField(rect, sourceProperty.displayName, (UnityEngine.LayerMask)value);
                     break;
                 case SerializedPropertyType.Enum:
-                    newValue = EditorGUI.IntPopup(rect, sourceProperty.displayName, (int)value, new string[] { "EnumValue1", "EnumValue2" }, new int[] { 0, 1 });
+                    var enumType = SerializedPropertyTypeResolver.ObjectType(sourceProperty, typeof(System.Enum));
+                    var enumValue = System.Enum.ToObject(enumType, value);
+                    newValue = EditorGUI.EnumPopup(rect, sourceProperty.displayName, (System.Enum)enumValue);
                     break;
                 case SerializedPropertyType.Vector2:
                     newValue = EditorGUI.Vector2Field(rect, sourceProperty.displayName, (UnityEngine.Vector2)value);
