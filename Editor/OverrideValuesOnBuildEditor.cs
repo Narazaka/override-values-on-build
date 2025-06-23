@@ -32,7 +32,7 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild.Editor
                 for (int i = 0; i < overrideValuesProperty.arraySize; i++)
                 {
                     var overrideValue = overrideValuesProperty.GetArrayElementAtIndex(i);
-                    var name = overrideValue.FindPropertyRelative(nameof(OverrideValue.name)).stringValue;
+                    var name = overrideValue.FindPropertyRelative(nameof(OverrideValue.propertyPath)).stringValue;
                     if (!overrideValuesMap.ContainsKey(name))
                     {
                         overrideValuesMap[name] = i;
@@ -55,13 +55,6 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild.Editor
                 overrideValuesMap = null;
             }
             serializedObject.ApplyModifiedProperties();
-
-            var ov = (OverrideValuesOnBuild)target;
-            var fieldInfos = SerializeFieldInfo.GetSerializeFields(ov.target);
-            foreach (var fieldInfo in fieldInfos)
-            {
-                EditorGUILayout.LabelField($"{fieldInfo.Name} : {fieldInfo.Type}", $"{fieldInfo.GetValue()}");
-            }
         }
 
         void DisplayProperties(SerializedObject serializedObject)
@@ -117,8 +110,8 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild.Editor
                     {
                         overrideValuesProperty.InsertArrayElementAtIndex(overrideValuesProperty.arraySize);
                         var overrideValue = overrideValuesProperty.GetArrayElementAtIndex(overrideValuesProperty.arraySize - 1);
-                        overrideValue.FindPropertyRelative(nameof(OverrideValue.name)).stringValue = property.propertyPath;
-                        overrideValue.FindPropertyRelative(nameof(OverrideValue.type)).stringValue = property.propertyType.ToString();
+                        overrideValue.FindPropertyRelative(nameof(OverrideValue.propertyPath)).stringValue = property.propertyPath;
+                        overrideValue.FindPropertyRelative(nameof(OverrideValue.propertyType)).intValue = (int)property.propertyType;
                         overrideValue.FindPropertyRelative(nameof(OverrideValue.value)).stringValue = SerializedJsonValue.Serialize(property.propertyType, SerializedValueAccessor.GetValue(property));
                     }
                     else
@@ -151,11 +144,5 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild.Editor
                 }
             }
         }
-    }
-
-    [System.Serializable]
-    public class JsonValue
-    {
-        public string value;
     }
 }
