@@ -1,4 +1,4 @@
-# Oveeride Values on Build
+# Override Values on Build
 
 NDMFビルド時にコンポーネントの値を書き換えるコンポーネント
 
