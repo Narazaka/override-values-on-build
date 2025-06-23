@@ -1,4 +1,4 @@
-# Oveerride Values on Build
+# Oveeride Values on Build
 
 NDMFビルド時にコンポーネントの値を書き換えるコンポーネント
 
