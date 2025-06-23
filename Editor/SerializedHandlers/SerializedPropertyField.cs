@@ -28,7 +28,7 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild.Editor.SerializedHandlers
                     newValue = EditorGUI.ColorField(rect, sourceProperty.displayName, (UnityEngine.Color)value);
                     break;
                 case SerializedPropertyType.ObjectReference:
-                    newValue = EditorGUI.ObjectField(rect, sourceProperty.displayName, (UnityEngine.Object)value, typeof(UnityEngine.Object), true);
+                    newValue = EditorGUI.ObjectField(rect, sourceProperty.displayName, (UnityEngine.Object)value, SerializedPropertyTypeResolver.ObjectType(sourceProperty), true);
                     break;
                 case SerializedPropertyType.LayerMask:
                     newValue = EditorGUI.LayerField(rect, sourceProperty.displayName, (UnityEngine.LayerMask)value);
