@@ -1,6 +1,8 @@
 # Oveerride Values on Build
 
-desc
+NDMFビルド時にコンポーネントの値を書き換えるコンポーネント
+
+そのコンポーネントがActiveな場合にのみ動作します。
 
 ## Install
 
@@ -16,7 +18,17 @@ https://github.com/Narazaka/override-values-on-build/releases/latest から `net
 
 ## Usage
 
-TODO
+アバター内の任意のオブジェクトに「Add Component」ボタンから「OverrideValuesOnBuild」コンポーネントを付けます。
+
+Targetの欄に値を上書きしたいコンポーネントを指定し、設定します。
+
+### コンポーネントを選ぶには？
+
+コンポーネントを個別に設定するには、コンポーネントのヘッダ部分をドラッグ&ドロップする必要があります。
+
+OverrideValuesOnBuildが付いているGameObjectをヒエラルキー上で右クリックして、一番下にある「Properties...」というメニューを選ぶとそのオブジェクトがポップアップ表示になります。
+
+このポップアップしたOverrideValuesOnBuildに、対象のコンポーネントのヘッダ部分をドラッグ&ドロップする方法が便利です。
 
 ## License
 
