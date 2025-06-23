@@ -1,8 +1,8 @@
 # Override Values on Build
 
-NDMFビルド時にコンポーネントの値を書き換えるコンポーネント
+NDMFビルド時にコンポーネントの値を書き換えるOverrideValuesOnBuildコンポーネント
 
-そのコンポーネントがActiveな場合にのみ動作します。
+OverrideValuesOnBuildコンポーネントはActiveな場合にのみ上書きを実行します。
 
 ## Install
 
