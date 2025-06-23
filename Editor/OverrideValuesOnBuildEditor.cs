@@ -23,7 +23,6 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild.Editor
         {
             serializedObject.UpdateIfRequiredOrScript();
             EditorGUILayout.PropertyField(targetProperty);
-            EditorGUILayout.PropertyField(overrideValuesProperty, true);
 
             if (overrideValuesMap == null)
             {
@@ -48,6 +47,8 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild.Editor
             targetSerializedObject.UpdateIfRequiredOrScript();
             DisplayProperties(serializedObject);
             targetSerializedObject.ApplyModifiedProperties();
+
+            EditorGUILayout.PropertyField(overrideValuesProperty, true);
 
             if (serializedObject.hasModifiedProperties)
             {
