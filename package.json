@@ -1,8 +1,8 @@
 {
   "name": "net.narazaka.vrchat.override-values-on-build",
   "version": "1.0.0",
-  "displayName": "Oveerride Values on Build",
-  "description": "Oveerride Values on Build",
+  "displayName": "Override Values on Build",
+  "description": "NDMFビルド時にコンポーネントの値を書き換えるコンポーネント",
   "author": {
     "name": "Narazaka",
     "url": "https://github.com/Narazaka"
@@ -12,7 +12,7 @@
   "url" : "https://github.com/Narazaka/override-values-on-build.git",
   "unity": "2022.3",
   "vpmDependencies": {
-    "com.vrchat.avatars": ">=3.7.5",
-    "com.vrchat.worlds": ">=3.7.5"
+    "com.vrchat.avatars": ">=3 <4-a",
+    "nadena.dev.ndmf": ">=1 <2-a"
   }
 }
