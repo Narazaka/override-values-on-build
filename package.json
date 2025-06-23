@@ -1,0 +1,18 @@
+{
+  "name": "net.narazaka.vrchat.override-values-on-build",
+  "version": "1.0.0",
+  "displayName": "Oveerride Values on Build",
+  "description": "Oveerride Values on Build",
+  "author": {
+    "name": "Narazaka",
+    "url": "https://github.com/Narazaka"
+  },
+  "license": "Zlib",
+  "type": "tool",
+  "url" : "https://github.com/Narazaka/override-values-on-build.git",
+  "unity": "2022.3",
+  "vpmDependencies": {
+    "com.vrchat.avatars": ">=3.7.5",
+    "com.vrchat.worlds": ">=3.7.5"
+  }
+}
