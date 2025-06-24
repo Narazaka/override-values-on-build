@@ -13,7 +13,18 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild.Editor
 
         protected override void Configure()
         {
-            InPhase(BuildPhase.Resolving).BeforePlugin("nadena.dev.modular-avatar").Run(DisplayName, Run);
+            InPhase(BuildPhase.Resolving)
+                .BeforePlugin("nadena.dev.modular-avatar")
+                .BeforePlugin("net.narazaka.vrchat.breast_pb_adjuster")
+                .BeforePlugin("net.narazaka.vrchat.animator-layer-filter")
+                .BeforePlugin("net.narazaka.vrchat.ma-sync-parameter-sequence-by-id")
+                .BeforePlugin("net.narazaka.vrchat.add-material-slots")
+                .BeforePlugin("dev.hai-vr.prefabulous.vrc.ReplaceAnimators")
+                .BeforePlugin("com.github.kurotu.vrc-quest-tools")
+                .BeforePlugin("com.anatawa12.avatar-optimizer")
+                .BeforePlugin("HhotateA.AvatarModifyTools.MagicalDresserInventorySystem.ModularAvatarExtension.MagicalDresserInventoryModularAvatarProcessor")
+                .BeforePlugin("org.kb10uy.zatools")
+                .Run(DisplayName, Run);
         }
 
         void Run(BuildContext ctx)
