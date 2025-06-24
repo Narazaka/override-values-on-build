@@ -36,6 +36,11 @@ OverrideValuesOnBuildが付いているGameObjectをヒエラルキー上で右�
 
 ![Drag & Drop](docs~/dandd.png)
 
+### ユースケース
+
+- Quest対応時にPhysBoneのプロパティを変えたい（[VRC Quest Tools](https://kurotu.github.io/VRCQuestTools/)の`VQT Platform Component Remover`などと併用すると便利）
+- [MyAvatarBuildSetting](https://narazaka.booth.pm/items/1327703) で設定ごとにコンポーネントのプロパティを変えたい
+
 ## 更新履歴
 
 - 0.1.1: BeforePlugin指定で互換性向上
