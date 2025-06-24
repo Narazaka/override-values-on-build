@@ -43,6 +43,7 @@ OverrideValuesOnBuildが付いているGameObjectをヒエラルキー上で右�
 
 ## 更新履歴
 
+- 0.1.2: バージョン指定ミス修正
 - 0.1.1: BeforePlugin指定で互換性向上
 - 0.1.0: リリース
 
