@@ -30,6 +30,11 @@ OverrideValuesOnBuildが付いているGameObjectをヒエラルキー上で右�
 
 このポップアップしたOverrideValuesOnBuildに、対象のコンポーネントのヘッダ部分をドラッグ&ドロップする方法が便利です。
 
+## 更新履歴
+
+- 0.1.1: BeforePlugin指定で互換性向上
+- 0.1.0: リリース
+
 ## License
 
 [Zlib License](LICENSE.txt)
