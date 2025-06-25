@@ -14,11 +14,14 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild.Editor
 
         Dictionary<string, int> overrideValuesMap;
 
+        List<int> ToDeleteIndexes = new List<int>();
+
         void OnEnable()
         {
             targetProperty = serializedObject.FindProperty(nameof(OverrideValuesOnBuild.target));
             overrideValuesProperty = serializedObject.FindProperty(nameof(OverrideValuesOnBuild.overrideValues));
         }
+
         public override void OnInspectorGUI()
         {
             serializedObject.UpdateIfRequiredOrScript();
@@ -39,14 +42,29 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild.Editor
             }
 
             var targetObject = targetProperty.objectReferenceValue;
-            if (targetSerializedObject == null || targetSerializedObject.targetObject != targetObject)
+            if (targetObject != null)
             {
-                targetSerializedObject = new SerializedObject(targetObject);
-            }
+                if (targetSerializedObject == null || targetSerializedObject.targetObject != targetObject)
+                {
+                    targetSerializedObject = new SerializedObject(targetObject);
+                }
 
-            targetSerializedObject.UpdateIfRequiredOrScript();
-            DisplayProperties(serializedObject);
-            targetSerializedObject.ApplyModifiedProperties();
+                targetSerializedObject.UpdateIfRequiredOrScript();
+                ToDeleteIndexes.Clear();
+                DisplayProperties(serializedObject);
+                if (ToDeleteIndexes.Count > 0)
+                {
+                    for (int i = ToDeleteIndexes.Count - 1; i >= 0; i--)
+                    {
+                        var index = ToDeleteIndexes[i];
+                        if (index < overrideValuesProperty.arraySize)
+                        {
+                            overrideValuesProperty.DeleteArrayElementAtIndex(index);
+                        }
+                    }
+                }
+                targetSerializedObject.ApplyModifiedProperties();
+            }
 
             EditorGUILayout.PropertyField(overrideValuesProperty, true);
 
@@ -116,8 +134,8 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild.Editor
                     }
                     else
                     {
-                        overrideValuesProperty.DeleteArrayElementAtIndex(overrideValueIndex);
-                        overrideValuesMap.Remove(property.propertyPath);
+                        ToDeleteIndexes.Add(overrideValueIndex);
+                        return;
                     }
                 }
                 EditorGUI.BeginDisabledGroup(true);
