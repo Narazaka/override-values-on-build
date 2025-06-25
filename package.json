@@ -1,6 +1,6 @@
 {
   "name": "net.narazaka.vrchat.override-values-on-build",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "displayName": "Override Values on Build",
   "description": "NDMFビルド時にコンポーネントの値を書き換えるコンポーネント",
   "author": {
