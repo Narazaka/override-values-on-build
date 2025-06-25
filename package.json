@@ -10,6 +10,8 @@
   "license": "Zlib",
   "type": "tool",
   "url" : "https://github.com/Narazaka/override-values-on-build.git",
+  "documentationUrl": "https://github.com/Narazaka/override-values-on-build#override-values-on-build",
+  "changelogUrl": "https://github.com/Narazaka/override-values-on-build#%E6%9B%B4%E6%96%B0%E5%B1%A5%E6%AD%B4",
   "unity": "2022.3",
   "vpmDependencies": {
     "com.vrchat.avatars": ">=3.0.0 <4.0.0-a",
