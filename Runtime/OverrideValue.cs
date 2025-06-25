@@ -8,5 +8,6 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild
         public string propertyPath;
         public int propertyType;
         public string value;
+        public UnityEngine.Object target;
     }
 }

@@ -123,14 +123,14 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild.Editor
                 var newHasValue = EditorGUI.Toggle(checkRect, hasValue);
                 if (EditorGUI.EndChangeCheck())
                 {
-                    Debug.Log($"OverrideValuesOnBuildEditor: {property.propertyPath} {(newHasValue ? "enabled" : "disabled")}");
                     if (newHasValue)
                     {
                         overrideValuesProperty.InsertArrayElementAtIndex(overrideValuesProperty.arraySize);
                         var overrideValue = overrideValuesProperty.GetArrayElementAtIndex(overrideValuesProperty.arraySize - 1);
                         overrideValue.FindPropertyRelative(nameof(OverrideValue.propertyPath)).stringValue = property.propertyPath;
                         overrideValue.FindPropertyRelative(nameof(OverrideValue.propertyType)).intValue = (int)property.propertyType;
-                        overrideValue.FindPropertyRelative(nameof(OverrideValue.value)).stringValue = SerializedJsonValue.Serialize(property.propertyType, SerializedValueAccessor.GetValue(property));
+                        overrideValue.FindPropertyRelative(nameof(OverrideValue.value)).stringValue = property.propertyType == SerializedPropertyType.ObjectReference ? "" : SerializedJsonValue.Serialize(property.propertyType, SerializedValueAccessor.GetValue(property));
+                        overrideValue.FindPropertyRelative(nameof(OverrideValue.target)).objectReferenceValue = property.propertyType == SerializedPropertyType.ObjectReference ? property.objectReferenceValue : null;
                     }
                     else
                     {
@@ -156,7 +156,15 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild.Editor
 
                     var overrideValue = overrideValuesProperty.GetArrayElementAtIndex(overrideValueIndex);
                     var valueProperty = overrideValue.FindPropertyRelative(nameof(OverrideValue.value));
-                    SerializedPropertyField.PropertyField(rect, property, valueProperty);
+                    var targetProperty = overrideValue.FindPropertyRelative(nameof(OverrideValue.target));
+                    if (property.propertyType == SerializedPropertyType.ObjectReference && string.IsNullOrEmpty(valueProperty.stringValue))
+                    {
+                        EditorGUI.ObjectField(rect, targetProperty, SerializedPropertyTypeResolver.ObjectType(property, typeof(UnityEngine.Object)));
+                    }
+                    else
+                    {
+                        SerializedPropertyField.PropertyField(rect, property, valueProperty);
+                    }
 
                     EditorGUI.indentLevel = indentLevel;
                 }

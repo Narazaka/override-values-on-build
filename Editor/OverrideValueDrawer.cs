@@ -20,6 +20,8 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild.Editor
                 propertyType.intValue = (int)(SerializedPropertyType)EditorGUI.EnumPopup(position, new GUIContent(propertyType.displayName), (SerializedPropertyType)propertyType.intValue);
                 position.y += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
                 EditorGUI.PropertyField(position, property.FindPropertyRelative(nameof(OverrideValue.value)));
+                position.y += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
+                EditorGUI.PropertyField(position, property.FindPropertyRelative(nameof(OverrideValue.target)));
                 EditorGUI.indentLevel--;
             }
         }

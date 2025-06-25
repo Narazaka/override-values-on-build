@@ -122,7 +122,6 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild.Editor.SerializedHandlers
                 }
             }
 
-            Debug.Log($"SerializedPropertyTypeResolver: ObjectType for {sourceProperty.propertyPath} resolved to {currentType.Name}");
             return currentType;
         }
     }
