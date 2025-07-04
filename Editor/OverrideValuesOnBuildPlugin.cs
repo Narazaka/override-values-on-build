@@ -50,8 +50,8 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild.Editor
                 return;
             }
 #if HAS_VQT
-            var vqtGameObjectRemover = ov.GetComponent<KRT.VRCQuestTools.Components.PlatformGameObjectRemover>();
-            if (vqtGameObjectRemover != null)
+            var vqtGameObjectRemovers = ov.GetComponentsInParent<KRT.VRCQuestTools.Components.PlatformGameObjectRemover>();
+            foreach (var vqtGameObjectRemover in vqtGameObjectRemovers)
             {
                 var remove =
 #if UNITY_EDITOR_WIN
