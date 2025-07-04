@@ -43,6 +43,7 @@ OverrideValuesOnBuildが付いているGameObjectをヒエラルキー上で右�
 
 ## 更新履歴
 
+- 0.3.0: VRCQuestToolsのPlatform GameObject/Component Removerがあっても常に適用されていた問題を修正
 - 0.2.1: changelogUrl等を追加
 - 0.2.0: シーン上のオブジェクトをサポート
 - 0.1.4: バージョン指定ミス修正
