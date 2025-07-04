@@ -1,6 +1,7 @@
 using nadena.dev.ndmf;
 using UnityEditor;
 using Narazaka.VRChat.OverrideValuesOnBuild.Editor.SerializedHandlers;
+using System.Linq;
 
 [assembly: ExportsPlugin(typeof(Narazaka.VRChat.OverrideValuesOnBuild.Editor.OverrideValuesOnBuildPlugin))]
 
@@ -48,6 +49,37 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild.Editor
             {
                 return;
             }
+#if HAS_VQT
+            var vqtGameObjectRemover = ov.GetComponent<KRT.VRCQuestTools.Components.PlatformGameObjectRemover>();
+            if (vqtGameObjectRemover != null)
+            {
+                var remove =
+#if UNITY_EDITOR_WIN
+                    vqtGameObjectRemover.removeOnPC;
+#else
+                    vqtGameObjectRemover.removeOnAndroid;
+#endif
+                if (remove)
+                {
+                    return;
+                }
+            }
+            var vqtComponentRemover = ov.GetComponent<KRT.VRCQuestTools.Components.PlatformComponentRemover>();
+            if (vqtComponentRemover != null)
+            {
+                var setting = vqtComponentRemover.componentSettings.FirstOrDefault(s => s.component == ov);
+                var remove =
+#if UNITY_EDITOR_WIN
+                    setting.removeOnPC;
+#else
+                    setting.removeOnAndroid;
+#endif
+                if (remove)
+                {
+                    return;
+                }
+            }
+#endif
             var so = new SerializedObject(ov.target);
             so.Update();
             foreach (var overrideValue in ov.overrideValues)

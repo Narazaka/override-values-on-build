@@ -4,7 +4,8 @@
     "references": [
         "VRC.SDKBase",
         "Narazaka.VRChat.OverrideValuesOnBuild",
-        "nadena.dev.ndmf"
+        "nadena.dev.ndmf",
+        "VRCQuestTools"
     ],
     "includePlatforms": [
         "Editor"
@@ -15,6 +16,12 @@
     "precompiledReferences": [],
     "autoReferenced": false,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "com.github.kurotu.vrc-quest-tools",
+            "expression": "2.3.0",
+            "define": "HAS_VQT"
+        }
+    ],
     "noEngineReferences": false
 }
