@@ -43,6 +43,9 @@ OverrideValuesOnBuildが付いているGameObjectをヒエラルキー上で右�
 
 ## 更新履歴
 
+- 0.3.1:
+  - VRChat SDKでアップロード出来なかった問題を修正
+  - valueを手で書き換えて無効な文字列になった場合にインスペクターがエラーになっていた問題を修正
 - 0.3.0: VRCQuestToolsのPlatform GameObject/Component Removerがあっても常に適用されていた問題を修正
 - 0.2.1: changelogUrl等を追加
 - 0.2.0: シーン上のオブジェクトをサポート
