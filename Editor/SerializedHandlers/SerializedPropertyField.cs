@@ -7,7 +7,16 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild.Editor.SerializedHandlers
     {
         public static void PropertyField(Rect rect, SerializedProperty sourceProperty, SerializedProperty property)
         {
-            var value = SerializedJsonValue.Deserialize(sourceProperty.propertyType, property.stringValue);
+            object value;
+            try
+            {
+                value = SerializedJsonValue.Deserialize(sourceProperty.propertyType, property.stringValue);
+            }
+            catch (System.Exception ex)
+            {
+                EditorGUI.HelpBox(rect, "Error Value", MessageType.Error);
+                return;
+            }
             object newValue = null;
             EditorGUI.BeginChangeCheck();
             switch (sourceProperty.propertyType)
