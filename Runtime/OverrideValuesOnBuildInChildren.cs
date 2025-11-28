@@ -16,7 +16,7 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild
         {
 #if UNITY_EDITOR
             var type = targetType.ToType();
-            if (rootObject == null || type == null || type.IsSubclassOf(typeof(MonoBehaviour)))
+            if (rootObject == null || type == null || !type.IsSubclassOf(typeof(Component)))
             {
                 yield break;
             }
