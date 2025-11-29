@@ -96,16 +96,17 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild.Editor
                 return;
             }
 
-            var newType = childrenComponents[newSelectedTypeIndex].Item1;
-            UpdateSerializableType(newType);
+            (var newType, var components) = childrenComponents[newSelectedTypeIndex];
+
+            UpdateSerializableType(components.FirstOrDefault());
             
             // 最初のコンポーネントを適当に代表に選ぶ。
-            currentEditingTarget = childrenComponents[newSelectedTypeIndex].Item2.FirstOrDefault();
+            currentEditingTarget = components.FirstOrDefault();
         }
 
-        private void UpdateSerializableType(Type newType)
+        private void UpdateSerializableType(Object instance)
         {
-            var serializableType = SerializableUnityType.Create(newType);
+            var serializableType = SerializableUnityType.Create(instance);
             Undo.RecordObject(targetComponent, "Change target type");
             targetComponent.targetType = serializableType;
         }

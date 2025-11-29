@@ -8,6 +8,7 @@ using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
+using Object = UnityEngine.Object;
 
 namespace Narazaka.VRChat.OverrideValuesOnBuild
 {
@@ -47,40 +48,21 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild
             }
         }
         
-        public static SerializableUnityType Create(Type type)
+        public static SerializableUnityType Create(Object instance)
         {
-            if (type.IsSubclassOf(typeof(MonoBehaviour)))
+            if (instance is MonoBehaviour behaviour)
             {
-                return new SerializableUnityType(MonoScriptClassID, FindMonoScript(type));
+                var script = MonoScript.FromMonoBehaviour(behaviour);
+                return new SerializableUnityType(MonoScriptClassID, script);
             }
-            else if (UnityClassIdMap.TryGetClassId(type, out int id))
+            else if (UnityClassIdMap.TryGetClassId(instance.GetType(), out int id))
             {
                 return new SerializableUnityType(id, null);
             }
             else
             {
-                throw new ArgumentException($"SerializableUnityType does not support type: {type.FullName}");
+                throw new ArgumentException($"SerializableUnityType does not support type: {instance.GetType().FullName}");
             }
-        }
-
-        private static Dictionary<Type, MonoScript>? monoScriptCache = null;
-        private static MonoScript? FindMonoScript(Type type)
-        {
-            if (monoScriptCache == null)
-            {
-                monoScriptCache = new();
-                var guids = AssetDatabase.FindAssets($"t:MonoScript {type.Name}");
-                foreach (var guid in guids)
-                {
-                    var path = AssetDatabase.GUIDToAssetPath(guid);
-                    var script = AssetDatabase.LoadAssetAtPath<MonoScript>(path);
-                    if (script != null)
-                    {
-                        monoScriptCache[script.GetClass()] = script;
-                    }
-                }
-            }
-            return monoScriptCache.TryGetValue(type, out var value) ? value : null;
         }
     #endif
     }
