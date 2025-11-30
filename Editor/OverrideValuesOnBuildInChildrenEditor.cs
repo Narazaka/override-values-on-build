@@ -30,10 +30,10 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild.Editor
             UpdateComponentInformation(rootObjectProperty.objectReferenceValue as GameObject);
             var type = targetComponent.targetType.ToType();
             if (type == null) return;
-            var index = childrenComponents.ToList().FindIndex(pair => pair.Item1 == type);
-            if (index != -1) {selectedTypeIndex = index; currentEditingTarget = childrenComponents[index].Item2.FirstOrDefault();}
+            selectedTypeIndex = childrenComponents.ToList().FindIndex(pair => pair.Item1 == type);
+            currentEditingTarget = selectedTypeIndex == -1 ? null : childrenComponents[selectedTypeIndex].Item2.FirstOrDefault();
         }
-        
+
         protected override Object? DrawTargetSelection()
         {
             EditorGUI.BeginChangeCheck();
@@ -51,7 +51,7 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild.Editor
                     selectedTypeIndex = newSelectedTypeIndex;
                     OnTypeSelected(newSelectedTypeIndex);
                 }
-                EditorGUILayout.ObjectField("For Inspector display", currentEditingTarget, typeof(Component), true);
+                currentEditingTarget = EditorGUILayout.ObjectField("For Inspector display", currentEditingTarget, typeof(Component), true) as Component;
             }
 
             return currentEditingTarget;
@@ -84,7 +84,7 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild.Editor
                     mapping[type].Add(component);
                 }
                 childrenComponents = mapping.Select(pair => (pair.Key, pair.Value)).ToArray();
-                componentTypeNames = childrenComponents.Select(pair => pair.Item1.FullName ?? pair.Item1.Name).ToArray();
+                componentTypeNames = childrenComponents.Select(pair => $"{pair.Item1.Name} ({pair.Item1.FullName})").ToArray();
             }
         }
 
