@@ -106,8 +106,11 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild
             var unityType = s_findByName.Invoke(null, new object[] { type.Name });
             if (unityType == null) return false;
 
-            classId = (int)(s_persistentIdProp.GetValue(unityType) ?? 0);
-            return classId != 0;
+            var persistentId = s_persistentIdProp.GetValue(unityType);
+            if (persistentId is not int persistentIdInt) return false;
+
+            classId = persistentIdInt;
+            return true;
         }
         
         public static bool TryGetType(int classId, [NotNullWhen(true)] out Type? type)
@@ -125,7 +128,7 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild
             if (s_nameToType == null)
             {
                 s_nameToType = new();
-                var objectTypes = TypeCache.GetTypesDerivedFrom<UnityEngine.Object>();  
+                var objectTypes = TypeCache.GetTypesDerivedFrom<Object>();  
                 foreach (var objectType in objectTypes)  
                 {
                     s_nameToType[objectType.Name] = objectType;
