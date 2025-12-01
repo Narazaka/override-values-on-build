@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using Object = UnityEngine.Object;
+using UnityEditor.IMGUI.Controls;
 
 namespace Narazaka.VRChat.OverrideValuesOnBuild.Editor
 {
@@ -21,6 +22,7 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild.Editor
 
         int selectedTypeIndex = -1;
         Component? currentEditingTarget = null;
+        AdvancedDropdownState componentTypeDropdownState = new();
 
         protected override void OnEnable()
         {
@@ -45,11 +47,24 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild.Editor
 
             using (new EditorGUI.DisabledScope(rootObjectProperty.objectReferenceValue == null))
             {
-                var newSelectedTypeIndex = EditorGUILayout.Popup(new GUIContent("Type"), selectedTypeIndex, componentTypeNames);
-                if (newSelectedTypeIndex != selectedTypeIndex)
+                var rect = EditorGUILayout.GetControlRect();
+                rect = EditorGUI.PrefixLabel(rect, new GUIContent("Type"));
+                var label = selectedTypeIndex >= 0 && selectedTypeIndex < componentTypeNames.Length
+                    ? componentTypeNames[selectedTypeIndex]
+                    : "Select Type";
+                if (GUI.Button(rect, label, EditorStyles.popup))
                 {
-                    selectedTypeIndex = newSelectedTypeIndex;
-                    OnTypeSelected(newSelectedTypeIndex);
+                    var dropdown = new ComponentTypeDropdown(
+                        componentTypeDropdownState,
+                        componentTypeNames,
+                        selectedTypeIndex,
+                        newSelectedTypeIndex =>
+                        {
+                            if (newSelectedTypeIndex == selectedTypeIndex) return;
+                            selectedTypeIndex = newSelectedTypeIndex;
+                            OnTypeSelected(newSelectedTypeIndex);
+                        });
+                    dropdown.Show(rect);
                 }
                 currentEditingTarget = EditorGUILayout.ObjectField("For Inspector display", currentEditingTarget, typeof(Component), true) as Component;
             }
@@ -109,6 +124,53 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild.Editor
             var serializableType = SerializableUnityType.Create(instance);
             Undo.RecordObject(targetComponent, "Change target type");
             targetComponent.targetType = serializableType;
+        }
+
+        class ComponentTypeDropdown : AdvancedDropdown
+        {
+            readonly string[] componentTypeNames;
+            readonly int currentIndex;
+            readonly Action<int> onSelected;
+
+            class ComponentTypeDropdownItem : AdvancedDropdownItem
+            {
+                public int Index { get; }
+
+                public ComponentTypeDropdownItem(string name, int index) : base(name)
+                {
+                    Index = index;
+                }
+            }
+
+            public ComponentTypeDropdown(
+                AdvancedDropdownState state,
+                string[] componentTypeNames,
+                int currentIndex,
+                Action<int> onSelected) : base(state)
+            {
+                this.componentTypeNames = componentTypeNames;
+                this.currentIndex = currentIndex;
+                this.onSelected = onSelected;
+            }
+
+            protected override AdvancedDropdownItem BuildRoot()
+            {
+                var root = new AdvancedDropdownItem("Type");
+                for (var i = 0; i < componentTypeNames.Length; i++)
+                {
+                    root.AddChild(new ComponentTypeDropdownItem(componentTypeNames[i], i));
+                }
+
+                return root;
+            }
+
+            protected override void ItemSelected(AdvancedDropdownItem item)
+            {
+                if (item is ComponentTypeDropdownItem typeItem)
+                {
+                    onSelected?.Invoke(typeItem.Index);
+                }
+            }
         }
     }
 }
