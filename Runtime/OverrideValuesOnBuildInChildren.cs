@@ -24,6 +24,8 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild
             {
                 yield return component;
             }
+#else
+            yield break;
 #endif
         }
 
