@@ -17,15 +17,17 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild
     public class SerializableUnityType
     {
         public int ClassID;
-        public MonoScript? Script;
+        public string ScriptGUID;
+        public ulong ScriptFileID;
 
-        public SerializableUnityType(int classID, MonoScript? script)
+        public SerializableUnityType(int classID, string scriptGUID, ulong scriptFileID)
         {
             ClassID = classID;
-            Script = script;
+            ScriptGUID = scriptGUID;
+            ScriptFileID = scriptFileID;
         }
 
-        public SerializableUnityType() : this(0, null) {}
+        public SerializableUnityType() : this(0, "", 0) {}
 
     #if UNITY_EDITOR
         private const int MonoScriptClassID = 114;
@@ -35,9 +37,9 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild
             // User Script
             if (ClassID == MonoScriptClassID)
             {
-                if (Script != null)
+                if (string.IsNullOrEmpty(ScriptGUID))
                 {
-                    return Script.GetClass();
+                    return GetMonoScript(ScriptGUID, ScriptFileID)?.GetClass();
                 }
                 return null;
             }
@@ -53,16 +55,31 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild
             if (instance is MonoBehaviour behaviour)
             {
                 var script = MonoScript.FromMonoBehaviour(behaviour);
-                return new SerializableUnityType(MonoScriptClassID, script);
+                var (guid, fileid) = GetGuidAndFileId(script);
+                return new SerializableUnityType(MonoScriptClassID, guid, fileid);
             }
             else if (UnityClassIdMap.TryGetClassId(instance.GetType(), out int id))
             {
-                return new SerializableUnityType(id, null);
+                return new SerializableUnityType(id, "", 0);
             }
             else
             {
                 throw new ArgumentException($"SerializableUnityType does not support type: {instance.GetType().FullName}");
             }
+        }
+
+        private static MonoScript? GetMonoScript(string guid, ulong fileid)
+        {
+            const int MonoScriptIdentifierType = 1;
+            var idString = $"GlobalObjectId_V1-{MonoScriptIdentifierType}-{guid}-{fileid}-0";
+            if (!GlobalObjectId.TryParse(idString, out var id)) return null;
+            return GlobalObjectId.GlobalObjectIdentifierToObjectSlow(id) as MonoScript;
+        }
+
+        private static (string guid, ulong fileid) GetGuidAndFileId(MonoScript script)
+        {
+            var id = GlobalObjectId.GetGlobalObjectIdSlow(script);
+            return (id.assetGUID.ToString(), id.targetObjectId);
         }
     #endif
     }
