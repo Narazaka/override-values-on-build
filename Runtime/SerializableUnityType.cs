@@ -29,7 +29,7 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild
 
         public SerializableUnityType() : this(0, "", 0) {}
 
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
         private const int MonoScriptClassID = 114;
 
         public Type? ToType()
@@ -81,10 +81,10 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild
             var id = GlobalObjectId.GetGlobalObjectIdSlow(script);
             return (id.assetGUID.ToString(), id.targetObjectId);
         }
-    #endif
+#endif
     }
 
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
     internal static class UnityClassIdMap
     {
         private static readonly Type? s_unityTypeType;
@@ -155,5 +155,5 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild
             return s_nameToType.TryGetValue(nameString, out type);
         }
     }
-    #endif
+#endif
 }
