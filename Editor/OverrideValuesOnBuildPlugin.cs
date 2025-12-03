@@ -30,7 +30,7 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild.Editor
 
         void Run(BuildContext ctx)
         {
-            var ovs = ctx.AvatarRootObject.GetComponentsInChildren<OverrideValuesOnBuild>(true);
+            var ovs = ctx.AvatarRootObject.GetComponentsInChildren<OverrideValuesOnBuildBase>(true);
             foreach (var ov in ovs)
             {
                 RunComponent(ctx, ov);
@@ -39,13 +39,15 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild.Editor
 
         }
 
-        void RunComponent(BuildContext ctx, OverrideValuesOnBuild ov)
+        void RunComponent(BuildContext ctx, OverrideValuesOnBuildBase ov)
         {
             if (!ov.isActiveAndEnabled)
             {
                 return;
             }
-            if (ov.target == null || ov.overrideValues == null || ov.overrideValues.Length == 0)
+            var targets = ov.GetTargets().ToArray();
+            var overrideValues = ov.OverrideValues;
+            if (targets.Length == 0 || overrideValues.Length == 0)
             {
                 return;
             }
@@ -79,21 +81,24 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild.Editor
                     return;
                 }
             }
-#endif
-            var so = new SerializedObject(ov.target);
-            so.Update();
-            foreach (var overrideValue in ov.overrideValues)
+#endif      
+            foreach (var target in targets)
             {
-                if (overrideValue.propertyType == (int)SerializedPropertyType.ObjectReference && string.IsNullOrEmpty(overrideValue.value))
+                var so = new SerializedObject(target);
+                so.Update();
+                foreach (var overrideValue in overrideValues)
                 {
-                    so.FindProperty(overrideValue.propertyPath).objectReferenceValue = overrideValue.target;
+                    if (overrideValue.propertyType == (int)SerializedPropertyType.ObjectReference && string.IsNullOrEmpty(overrideValue.value))
+                    {
+                        so.FindProperty(overrideValue.propertyPath).objectReferenceValue = overrideValue.target;
+                    }
+                    else
+                    {
+                        SerializedValueAccessor.SetValue(so.FindProperty(overrideValue.propertyPath), SerializedJsonValue.Deserialize((SerializedPropertyType)System.Enum.ToObject(typeof(SerializedPropertyType), overrideValue.propertyType), overrideValue.value));
+                    }
                 }
-                else
-                {
-                    SerializedValueAccessor.SetValue(so.FindProperty(overrideValue.propertyPath), SerializedJsonValue.Deserialize((SerializedPropertyType)System.Enum.ToObject(typeof(SerializedPropertyType), overrideValue.propertyType), overrideValue.value));
-                }
+                so.ApplyModifiedPropertiesWithoutUndo();
             }
-            so.ApplyModifiedPropertiesWithoutUndo();
         }
     }
 }
