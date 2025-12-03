@@ -27,7 +27,7 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild
             ScriptFileID = scriptFileID;
         }
 
-        public SerializableUnityType() : this(0, "", 0) {}
+        public SerializableUnityType() : this(0, string.Empty, 0) {}
 
 #if UNITY_EDITOR
         private const int MonoScriptClassID = 114;
@@ -37,7 +37,7 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild
             // User Script
             if (ClassID == MonoScriptClassID)
             {
-                if (string.IsNullOrEmpty(ScriptGUID))
+                if (!string.IsNullOrEmpty(ScriptGUID))
                 {
                     return GetMonoScript(ScriptGUID, ScriptFileID)?.GetClass();
                 }
@@ -60,7 +60,7 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild
             }
             else if (UnityClassIdMap.TryGetClassId(instance.GetType(), out int id))
             {
-                return new SerializableUnityType(id, "", 0);
+                return new SerializableUnityType(id, string.Empty, 0);
             }
             else
             {
