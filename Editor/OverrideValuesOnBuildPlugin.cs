@@ -84,13 +84,15 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild.Editor
             so.Update();
             foreach (var overrideValue in ov.overrideValues)
             {
+                var property = so.FindProperty(overrideValue.propertyPath);
+                if (property == null) continue;
                 if (overrideValue.propertyType == (int)SerializedPropertyType.ObjectReference && string.IsNullOrEmpty(overrideValue.value))
                 {
-                    so.FindProperty(overrideValue.propertyPath).objectReferenceValue = overrideValue.target;
+                    property.objectReferenceValue = overrideValue.target;
                 }
                 else
                 {
-                    SerializedValueAccessor.SetValue(so.FindProperty(overrideValue.propertyPath), SerializedJsonValue.Deserialize((SerializedPropertyType)System.Enum.ToObject(typeof(SerializedPropertyType), overrideValue.propertyType), overrideValue.value));
+                    SerializedValueAccessor.SetValue(property, SerializedJsonValue.Deserialize((SerializedPropertyType)System.Enum.ToObject(typeof(SerializedPropertyType), overrideValue.propertyType), overrideValue.value));
                 }
             }
             so.ApplyModifiedPropertiesWithoutUndo();
