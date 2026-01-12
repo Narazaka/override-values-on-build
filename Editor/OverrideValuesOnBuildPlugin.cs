@@ -45,7 +45,7 @@ namespace Narazaka.VRChat.OverrideValuesOnBuild.Editor
             {
                 return;
             }
-            if (ov.target == null || ov.overrideValues == null || ov.overrideValues.Length == 0)
+            if (ov.target == null || !ov.target.transform.IsChildOf(ctx.AvatarRootTransform) || ov.overrideValues == null || ov.overrideValues.Length == 0)
             {
                 return;
             }
